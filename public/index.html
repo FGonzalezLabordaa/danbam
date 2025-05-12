@@ -1,0 +1,25 @@
+document.addEventListener("DOMContentLoaded", () => { const form =
+document.getElementById("form-producto"); const tabla =
+document.getElementById("tabla"); form.addEventListener("submit", async (e) => {
+e.preventDefault(); const nombre = document.getElementById("nombre").value;
+const precio = document.getElementById("precio").value; await
+fetch("/api/productos", { method: "POST", headers: { "Content-Type":
+"application/json" }, body: JSON.stringify({ nombre, precio }), });
+form.reset(); cargarProductos(); }); async function cargarProductos() { const
+res = await fetch("/api/productos"); const productos = await res.json();
+tabla.innerHTML = `
+<thead>
+  <tr>
+    <th>Nombre</th>
+    <th>Precio</th>
+  </tr>
+</thead>
+<tbody>
+  ${productos.map(p => `
+  <tr>
+    <td>${p.nombre}</td>
+    <td>$${p.precio}</td>
+  </tr>
+  `).join("")}
+</tbody>
+`; } cargarProductos(); });
